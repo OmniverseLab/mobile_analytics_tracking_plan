@@ -1,0 +1,1493 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics Tracking Plan</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+      :root {
+        --bg: #f5f7fa;
+        --surface: #ffffff;
+        --surface-raised: #eef1f6;
+        --border: #d1d9e6;
+        --border-subtle: #e4e9f2;
+        --text-primary: #111827;
+        --text-secondary: #4b5568;
+        --text-muted: #9aa5b4;
+        --accent: #3b6fe8;
+        --accent-dim: rgba(59, 111, 232, 0.1);
+
+        /* Provider pills */
+        --firebase: #d97706;
+        --firebase-bg: rgba(217, 119, 6, 0.1);
+        --adjust: #059669;
+        --adjust-bg: rgba(5, 150, 105, 0.1);
+        --meta: #1d4ed8;
+        --meta-bg: rgba(29, 78, 216, 0.1);
+        --tiktok: #dc2626;
+        --tiktok-bg: rgba(220, 38, 38, 0.1);
+
+        /* Category tags */
+        --cat-auth: #7c3aed;
+        --cat-auth-bg: rgba(124, 58, 237, 0.1);
+        --cat-nav: #0284c7;
+        --cat-nav-bg: rgba(2, 132, 199, 0.1);
+        --cat-commerce: #047857;
+        --cat-commerce-bg: rgba(4, 120, 87, 0.1);
+        --cat-content: #c2410c;
+        --cat-content-bg: rgba(194, 65, 12, 0.1);
+        --cat-lifecycle: #be185d;
+        --cat-lifecycle-bg: rgba(190, 24, 93, 0.1);
+        --cat-social: #a16207;
+        --cat-social-bg: rgba(161, 98, 7, 0.12);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text-primary);
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        font-weight: 400;
+        background: var(--surface-raised);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 1px 5px;
+      }
+
+      /* ── Header ── */
+      .header {
+        padding: 48px 48px 36px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .header-left {
+        flex: 1;
+        min-width: 280px;
+      }
+
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      /* ── Provider legend ── */
+      .legend {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .legend-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-right: 4px;
+      }
+
+      /* ── Stats bar ── */
+      .stats {
+        display: flex;
+        gap: 1px;
+        border-bottom: 1px solid var(--border);
+        background: var(--border);
+      }
+
+      .stat {
+        flex: 1;
+        background: var(--surface);
+        padding: 20px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 500;
+      }
+
+      /* ── Toolbar ── */
+      .toolbar {
+        padding: 16px 48px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .filter-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-right: 4px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .filter-btn {
+        padding: 5px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.15s;
+      }
+
+      .filter-btn:hover {
+        border-color: var(--accent);
+        color: var(--text-primary);
+      }
+
+      .filter-btn.active {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── Main content ── */
+      .main {
+        padding: 32px 48px 64px;
+      }
+
+      /* ── Category section ── */
+      .category-section {
+        margin-bottom: 40px;
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .category-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .category-count {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-left: auto;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* ── Table ── */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+
+      .col-event {
+        width: 22%;
+      }
+      .col-trigger {
+        width: 36%;
+      }
+      .col-adjust {
+        width: 7%;
+      }
+      .col-firebase {
+        width: 7%;
+      }
+      .col-meta {
+        width: 7%;
+      }
+      .col-tiktok {
+        width: 7%;
+      }
+      .col-notes {
+        width: 14%;
+      }
+
+      thead th {
+        padding: 8px 14px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      thead th.center {
+        text-align: center;
+      }
+
+      tbody tr {
+        border-bottom: 1px solid var(--border-subtle);
+        transition: background 0.1s;
+      }
+
+      tbody tr:hover {
+        background: var(--surface);
+      }
+
+      tbody tr.hidden {
+        display: none;
+      }
+
+      td {
+        padding: 12px 14px;
+        vertical-align: top;
+      }
+
+      .event-name {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-primary);
+        word-break: break-all;
+        line-height: 1.5;
+      }
+
+      .trigger-text {
+        font-size: 13px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .provider-cell {
+        text-align: center;
+        padding: 12px 8px;
+      }
+
+      .dot {
+        display: inline-flex;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .dot-firebase {
+        background: var(--firebase-bg);
+        color: var(--firebase);
+        border: 1px solid rgba(217, 119, 6, 0.35);
+      }
+      .dot-adjust {
+        background: var(--adjust-bg);
+        color: var(--adjust);
+        border: 1px solid rgba(5, 150, 105, 0.35);
+      }
+      .dot-meta {
+        background: var(--meta-bg);
+        color: var(--meta);
+        border: 1px solid rgba(29, 78, 216, 0.35);
+      }
+      .dot-tiktok {
+        background: var(--tiktok-bg);
+        color: var(--tiktok);
+        border: 1px solid rgba(220, 38, 38, 0.35);
+      }
+
+      .dash {
+        color: var(--text-muted);
+        font-size: 12px;
+      }
+
+      .notes-text {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        line-height: 1.5;
+      }
+
+      .notes-text .tag {
+        display: inline-block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-weight: 500;
+        margin-top: 2px;
+      }
+
+      .tag-revenue {
+        background: rgba(4, 120, 87, 0.12);
+        color: #047857;
+      }
+      .tag-excluded {
+        background: rgba(220, 38, 38, 0.1);
+        color: #b91c1c;
+      }
+      .tag-adjust-conversion {
+        background: rgba(5, 150, 105, 0.12);
+        color: #059669;
+      }
+      .tag-first-launch {
+        background: rgba(161, 98, 7, 0.12);
+        color: #92400e;
+      }
+
+      /* ── Provider pills in legend ── */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .pill-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+
+      .pill-firebase {
+        background: var(--firebase-bg);
+        color: var(--firebase);
+      }
+      .pill-firebase .pill-dot {
+        background: var(--firebase);
+      }
+      .pill-adjust {
+        background: var(--adjust-bg);
+        color: var(--adjust);
+      }
+      .pill-adjust .pill-dot {
+        background: var(--adjust);
+      }
+      .pill-meta {
+        background: var(--meta-bg);
+        color: var(--meta);
+      }
+      .pill-meta .pill-dot {
+        background: var(--meta);
+      }
+      .pill-tiktok {
+        background: var(--tiktok-bg);
+        color: var(--tiktok);
+      }
+      .pill-tiktok .pill-dot {
+        background: var(--tiktok);
+      }
+
+      /* Category badge colors */
+      .cat-lifecycle {
+        background: var(--cat-lifecycle-bg);
+        color: var(--cat-lifecycle);
+      }
+      .cat-auth {
+        background: var(--cat-auth-bg);
+        color: var(--cat-auth);
+      }
+      .cat-nav {
+        background: var(--cat-nav-bg);
+        color: var(--cat-nav);
+      }
+      .cat-commerce {
+        background: var(--cat-commerce-bg);
+        color: var(--cat-commerce);
+      }
+      .cat-content {
+        background: var(--cat-content-bg);
+        color: var(--cat-content);
+      }
+      .cat-social {
+        background: var(--cat-social-bg);
+        color: var(--cat-social);
+      }
+
+      @media (max-width: 900px) {
+        .header,
+        .toolbar,
+        .main {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        .stat {
+          padding: 16px 20px;
+        }
+        .col-notes {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-left">
+        <div class="eyebrow">Analytics · Tracking Plan (v 7.0.0)</div>
+        <h1>Event Registry</h1>
+        <p class="subtitle">
+          All instrumented events across Firebase, Adjust, Meta & TikTok
+        </p>
+      </div>
+      <div class="legend">
+        <span class="legend-label">Providers</span>
+        <span class="pill pill-firebase"
+          ><span class="pill-dot"></span>Firebase</span
+        >
+        <span class="pill pill-adjust"
+          ><span class="pill-dot"></span>Adjust</span
+        >
+        <span class="pill pill-meta"><span class="pill-dot"></span>Meta</span>
+        <span class="pill pill-tiktok"
+          ><span class="pill-dot"></span>TikTok</span
+        >
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">33</div>
+        <div class="stat-label">Total Events</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">9</div>
+        <div class="stat-label">Adjust Conversions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">13</div>
+        <div class="stat-label">Multi-provider Events</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">4</div>
+        <div class="stat-label">Firebase Excluded</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <span class="filter-label">Filter</span>
+      <button class="filter-btn active" onclick="filterAll(this)">All</button>
+      <button class="filter-btn" onclick="filterProvider(this, 'adjust')">
+        Adjust only
+      </button>
+      <button class="filter-btn" onclick="filterProvider(this, 'firebase')">
+        Firebase only
+      </button>
+      <button class="filter-btn" onclick="filterProvider(this, 'meta')">
+        Meta only
+      </button>
+      <button class="filter-btn" onclick="filterProvider(this, 'tiktok')">
+        TikTok only
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'lifecycle')">
+        Lifecycle
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'auth')">
+        Auth
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'nav')">
+        Navigation
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'commerce')">
+        Commerce
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'content')">
+        Content
+      </button>
+      <button class="filter-btn" onclick="filterCategory(this, 'social')">
+        Social
+      </button>
+    </div>
+
+    <div class="main">
+      <!-- ── LIFECYCLE ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-lifecycle">Lifecycle</span>
+          <span class="category-count">5 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="lifecycle">
+              <td><div class="event-name">app_install</div></td>
+              <td>
+                <div class="trigger-text">
+                  First app launch only, called once via
+                  <code>_checkAndLogFirstLaunch()</code> when the
+                  <code>first_launch</code> cache flag is true, then the flag is
+                  set to false.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">
+                <span class="dot dot-tiktok">T</span>
+              </td>
+              <td>
+                <div class="notes-text">
+                  Meta calls <code>fb_mobile_app_install</code>. TikTok fires
+                  <code>Install</code>.
+                  <span class="tag tag-first-launch">first-launch only</span>
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="lifecycle">
+              <td><div class="event-name">app_open</div></td>
+              <td>
+                <div class="trigger-text">
+                  On every app start via <code>_detectInitialAppOpen()</code>.
+                  Source is <code>notification</code> if app was opened from a
+                  push; otherwise <code>organic</code>. Also fires when a push
+                  notification opens the app mid-session via
+                  <code>FirebaseMessaging.onMessageOpenedApp</code>.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">
+                <span class="dot dot-tiktok">T</span>
+              </td>
+              <td>
+                <div class="notes-text">
+                  Meta calls <code>fb_mobile_activate_app</code>. TikTok fires
+                  <code>Launch</code>.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="lifecycle">
+              <td><div class="event-name">reengagement</div></td>
+              <td>
+                <div class="trigger-text">
+                  Called via <code>logReEngagementEvent()</code> when the user
+                  re-enters the app through a push notification interaction
+                  (source is always <code>push_notification</code>).
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="lifecycle">
+              <td><div class="event-name">deep_link_opened</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logDeepLinkOpened(deepLink)</code> whenever
+                  the app resolves a deep-link URL, both direct and deferred
+                  links go through <code>DeepLinkService</code> which triggers
+                  this call.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Parameters: <code>deep_link</code> URL string.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="lifecycle">
+              <td><div class="event-name">push_notification_received</div></td>
+              <td>
+                <div class="trigger-text">
+                  Called via <code>logPushNotificationReceived()</code> when a
+                  push notification arrives and is processed by the app.
+                  Parameters include title, body, campaign_name and
+                  notification_type.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── AUTH ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-auth">Auth</span>
+          <span class="category-count">8 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="auth">
+              <td><div class="event-name">sign_in</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired by <code>logSignIn(method, source)</code>, typically on
+                  a successful email/password login before
+                  <code>auth_login_success</code> is dispatched. Also triggers
+                  Firebase's native <code>logLogin</code> call.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Firebase also calls <code>logLogin(method)</code>.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">sign_up</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired by <code>logSignUp(method, source)</code> at the point a
+                  new user account is created, before
+                  <code>signup_completed</code> or
+                  <code>complete_registration</code>.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">signup_completed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via
+                  <code>logEvent(AnalyticsEvents.signupCompleted)</code> once
+                  registration is fully confirmed (e.g. after email verification
+                  or profile completion).
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">complete_registration</div></td>
+              <td>
+                <div class="trigger-text">
+                  Called via <code>trackCompleteRegistration()</code>, a
+                  Meta-focused registration event. Carries registration method,
+                  userId, optional value/currency.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">
+                <span class="dot dot-tiktok">T</span>
+              </td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-excluded">Firebase excluded</span> Meta
+                  fires <code>CompleteRegistration</code>. TikTok fires
+                  <code>CompleteRegistration</code>. Meta flushed immediately.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">auth_login_success</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>trackLoginSuccess()</code> on a successful
+                  email/password or non-social login. Triggers Meta
+                  <code>fb_mobile_login</code> and TikTok <code>Login</code>.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">
+                <span class="dot dot-tiktok">T</span>
+              </td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-excluded">Firebase excluded</span>
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">social_auth_success</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>trackSocialAuthSuccess()</code> after Google /
+                  Facebook / Apple sign-in completes. Branches to Firebase
+                  <code>logSignUp</code> or <code>logLogin</code> depending on
+                  <code>is_new_user</code>.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">
+                <span class="dot dot-tiktok">T</span>
+              </td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-excluded">Firebase excluded</span> (raw
+                  name); dispatched as <code>sign_up</code> or
+                  <code>login</code> to Firebase.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">logout</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired by <code>logLogout()</code> when the user explicitly
+                  signs out. Carries a timestamp parameter.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="auth">
+              <td><div class="event-name">profile_updated</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logProfileUpdate(changeType)</code> when the
+                  user saves a profile change (name, avatar, etc.).
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Parameters: <code>change_type</code>.
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── NAVIGATION ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-nav">Navigation</span>
+          <span class="category-count">3 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="nav">
+              <td><div class="event-name">screen_view</div></td>
+              <td>
+                <div class="trigger-text">
+                  Declared as a constant; fired by screen-level navigation
+                  observers (not directly invoked in the facade, typically
+                  auto-instrumented or called from route observers).
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">Auto or route-observer driven.</div>
+              </td>
+            </tr>
+            <tr data-cat="nav">
+              <td><div class="event-name">search_performed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via
+                  <code>logEvent(AnalyticsEvents.searchPerformed)</code> when
+                  the user submits a search query.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="nav">
+              <td><div class="event-name">itinerary_created</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when a new trip/itinerary is created and saved.
+                  Dispatched to Firebase and triggers an Adjust conversion
+                  event.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── COMMERCE ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-commerce">Commerce</span>
+          <span class="category-count">6 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="commerce">
+              <td><div class="event-name">ticket_provider_expanded</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logTicketProviderExpanded()</code> when the
+                  user expands a ticket provider section in the activity/detail
+                  view to see available tickets.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Maps to Adjust conversion token
+                  <code>ticketProviderClicked</code>.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="commerce">
+              <td><div class="event-name">ticket_detail_viewed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logTicketDetailViewed()</code> when the user
+                  opens a specific ticket detail page. Carries provider,
+                  ticketId and ticketTitle.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="commerce">
+              <td><div class="event-name">ticket_webview_opened</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logTicketWebviewOpened()</code> when the
+                  in-app webview is launched to display a ticket purchase page.
+                  Carries provider, ticketId, ticketTitle and URL.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Maps to Adjust conversion token <code>ticketClicked</code>.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="commerce">
+              <td><div class="event-name">ticket_redirected</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logTicketRedirected()</code> when the user is
+                  redirected to an external URL (e.g. third-party booking site)
+                  for ticket purchase.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="commerce">
+              <td><div class="event-name">purchase_completed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when a purchase is confirmed. Carries revenue and
+                  currency parameters which are forwarded to Adjust.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-revenue">revenue</span>
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="commerce">
+              <td><div class="event-name">meta_purchase</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>trackMetaPurchase(id, activityId)</code>, a
+                  Meta-only purchase signal separate from the main purchase
+                  flow. Used to report in-app purchase activity to Meta
+                  exclusively.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell"><span class="dot dot-meta">M</span></td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-excluded">Firebase excluded</span> Meta
+                  fires <code>Purchase</code>.
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── CONTENT ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-content">Content</span>
+          <span class="category-count">2 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="content">
+              <td><div class="event-name">audio_guide_unlocked</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when a user successfully unlocks an audio guide (e.g.
+                  via purchase or subscription). Triggers both Firebase and an
+                  Adjust conversion.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="content">
+              <td><div class="event-name">audio_guide_played</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when a user starts playing an audio guide. Dispatched to
+                  Firebase and triggers an Adjust conversion.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── SOCIAL ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-social">Social</span>
+          <span class="category-count">4 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="social">
+              <td><div class="event-name">Trip_shared</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>shareTripEvent(id, url, method)</code> when
+                  the user shares a trip/itinerary. Note: event name is
+                  capitalised (<code>Trip_shared</code>) in the constants but
+                  the Adjust conversion token maps to
+                  <code>itinerary_shared</code>.
+                </div>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-adjust">A</span>
+              </td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  <span class="tag tag-adjust-conversion"
+                    >Adjust conversion</span
+                  >
+                  Adjust token key: <code>itineraryShared</code>.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="social">
+              <td><div class="event-name">trip_share_opened</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when a share link is opened by a recipient, typically
+                  from a deferred deep-link resolution after another user taps a
+                  shared trip URL.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── UI INTERACTION (login screen CTA buttons) ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-nav">UI Interactions</span>
+          <span class="category-count">4 events</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="nav">
+              <td><div class="event-name">started_google_pressed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when the user taps "Continue with Google" on the
+                  onboarding/login screen, before the OAuth flow begins.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td></td>
+            </tr>
+            <tr data-cat="nav">
+              <td><div class="event-name">started_facebook_pressed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when the user taps "Continue with Facebook" on the
+                  onboarding/login screen, before the OAuth flow begins.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td></td>
+            </tr>
+            <tr data-cat="nav">
+              <td><div class="event-name">started_apple_pressed</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired when the user taps "Continue with Apple" on the
+                  onboarding/login screen, before the Sign in with Apple flow
+                  begins.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td></td>
+            </tr>
+            <tr data-cat="nav">
+              <td>
+                <div class="event-name">get_started_email_sheet_opened</div>
+              </td>
+              <td>
+                <div class="trigger-text">
+                  Fired when the user opens the email sign-up/sign-in bottom
+                  sheet from the onboarding screen.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── WISHLIST (standalone) ── -->
+      <div class="category-section">
+        <div class="category-header">
+          <span class="category-badge cat-social">Wishlist</span>
+          <span class="category-count">1 event</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th class="col-event">Event Name</th>
+              <th class="col-trigger">When it fires</th>
+              <th class="col-adjust center">Adjust</th>
+              <th class="col-firebase center">Firebase</th>
+              <th class="col-meta center">Meta</th>
+              <th class="col-tiktok center">TikTok</th>
+              <th class="col-notes">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-cat="social">
+              <td><div class="event-name">wishlist_opened</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logWishlistOpened()</code> whenever the user
+                  navigates to the Wishlist screen.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td>
+                <div class="notes-text">
+                  Optional <code>source</code> and <code>screen</code> params.
+                </div>
+              </td>
+            </tr>
+            <tr data-cat="social">
+              <td><div class="event-name">wishlist_city_added</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logWishlistCityAdded()</code> when the user
+                  adds a city to their wishlist. Carries cityId and cityName.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+            <tr data-cat="social">
+              <td><div class="event-name">wishlist_plan_trip_clicked</div></td>
+              <td>
+                <div class="trigger-text">
+                  Fired via <code>logWishlistPlanTripClicked()</code> when the
+                  user taps "Plan Trip" from within their wishlist for a
+                  specific city.
+                </div>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">
+                <span class="dot dot-firebase">F</span>
+              </td>
+              <td class="provider-cell">—</td>
+              <td class="provider-cell">—</td>
+              <td><div class="notes-text"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function clearActive() {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("active"));
+      }
+
+      function filterAll(btn) {
+        clearActive();
+        btn.classList.add("active");
+        document
+          .querySelectorAll("tbody tr")
+          .forEach((r) => r.classList.remove("hidden"));
+        document
+          .querySelectorAll(".category-section")
+          .forEach((s) => (s.style.display = ""));
+      }
+
+      function filterCategory(btn, cat) {
+        clearActive();
+        btn.classList.add("active");
+        document.querySelectorAll("tbody tr").forEach((r) => {
+          r.classList.toggle("hidden", r.dataset.cat !== cat);
+        });
+        document.querySelectorAll(".category-section").forEach((s) => {
+          const visible = [...s.querySelectorAll("tbody tr")].some(
+            (r) => !r.classList.contains("hidden"),
+          );
+          s.style.display = visible ? "" : "none";
+        });
+      }
+
+      function filterProvider(btn, provider) {
+        clearActive();
+        btn.classList.add("active");
+        const idx = { adjust: 2, firebase: 3, meta: 4, tiktok: 5 }[provider];
+        document.querySelectorAll("tbody tr").forEach((r) => {
+          const cells = r.querySelectorAll("td");
+          const has = cells[idx] && cells[idx].querySelector(".dot");
+          r.classList.toggle("hidden", !has);
+        });
+        document.querySelectorAll(".category-section").forEach((s) => {
+          const visible = [...s.querySelectorAll("tbody tr")].some(
+            (r) => !r.classList.contains("hidden"),
+          );
+          s.style.display = visible ? "" : "none";
+        });
+      }
+    </script>
+  </body>
+</html>
